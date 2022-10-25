@@ -1,14 +1,16 @@
 import $ from 'jquery'
 
+import { onLoadHtmlSuccess } from '../core/includes'
+
 const duration = 300
 
 function filterByCity(city){
     $('[wm-city]').each(function(index, element){
-        const isTarget = $(this).attr('wm-city') === city || city === null
+        const isTarget = $(element).attr('wm-city') === city || city === null
         if(isTarget){
-            $(this).parent().removeClass('d-none')
-            $(this).fadeIn(duration)
-        } else $(this).fadeOut(duration, () => $(this).parent().addClass('d-none'))
+            $(element).parent().removeClass('d-none')
+            $(element).fadeIn(duration)
+        } else $(element).fadeOut(duration, () => $(element).parent().addClass('d-none'))
     })
 }
 
@@ -20,12 +22,12 @@ $.fn.cityButtons = function (){
     
     const btns = Array.from(cities).map(city => {
         const btn = $('<button>').addClass(['btn', 'btn-info']).html(city)
-        btn.on(element => filterByCity(city))
+        btn.click(element => filterByCity(city))
         return btn
     })
     
     const btnAll = $('<button>').addClass(['btn', 'btn-info', 'active']).html('Todas')
-    btnAll.on(element => filterByCity(null))
+    btnAll.click(element => filterByCity(null))
     btns.push(btnAll)
     
     const btnGroup = $('<div>').addClass(['btn-group'])
@@ -35,4 +37,6 @@ $.fn.cityButtons = function (){
     return this
 }
 
-$('[wm-city-buttons]').cityButtons()
+onLoadHtmlSuccess(function() {
+    $('[wm-city-buttons]').cityButtons()
+})

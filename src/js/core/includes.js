@@ -10,10 +10,19 @@ function loadIncludes(parent){
                 $(element).html(data)
                 $(element).removeAttr('wm-include')
 
+                loadHtmlSuccessCallbacks.forEach(callback => callback(data))
                 loadIncludes(element)
             }
         })
     })
+}
+
+const loadHtmlSuccessCallbacks = []
+
+export function onLoadHtmlSuccess(callback) {
+    if(!loadHtmlSuccessCallbacks.includes(callback)) {
+        loadHtmlSuccessCallbacks.push(callback)
+    }
 }
 
 loadIncludes()
